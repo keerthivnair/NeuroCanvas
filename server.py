@@ -1,5 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from neural_network_design import OCRNeuralNetwork
+from ocr import nn
+
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -13,14 +16,22 @@ class RequestHandler(BaseHTTPRequestHandler):
             payload = json.loads(content)
 
             if payload.get('train'):
-                nn.train(payload['trainArray'])
+                for item in payload['trainArray']:
+                    x=item['y0']
+                    label=item['label']
+                    nn.train_single_sample(x,label)
                 nn.save()
+                   
 
             elif payload.get('predict'):
                 try:
+                    print('Predict request received!')
+                    print('Payload length:', len(payload['image']))
+                    print('Payload length:', len(payload['image']))
+                    print("Sample values:", payload['image'][:10])
                     response = {
                         'type': 'test',
-                        'result': nn.predict(str(payload['image']))
+                        'result': nn.predict((payload['image']))
                     }
                 except:
                     response_code = 500

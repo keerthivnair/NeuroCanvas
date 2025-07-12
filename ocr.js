@@ -6,7 +6,7 @@ var ocrDemo = {
   data: Array(400).fill(0),
 
   // Neural network config
-  BATCH_SIZE: 1, // Send after 5 training samples
+  BATCH_SIZE: 1, // Send after 1* training samples
   trainingRequestCount: 0, // Counter to track how many have been collected
   trainArray: [],
 
@@ -58,7 +58,7 @@ var ocrDemo = {
   fillSquare: function (ctx, x, y) {
     var xPixel = Math.floor(x / this.PIXEL_WIDTH);
     var yPixel = Math.floor(y / this.PIXEL_WIDTH);
-    this.data[xPixel * this.TRANSLATED_WIDTH + yPixel];
+    this.data[xPixel * this.TRANSLATED_WIDTH + yPixel]=1;
 
     ctx.fillStyle = "#000000";
     ctx.fillRect(
@@ -99,7 +99,7 @@ var ocrDemo = {
       return;
     }
     var json = {
-      image: this.data,
+      image: this.data.flat(),
       predict: true,
     };
     this.sendData(json);
